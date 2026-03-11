@@ -1,43 +1,41 @@
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * ================================================================
- * MAIN CLASS – UseCase2RoomInitialization
+ * MAIN CLASS – BookingMystayApp
  * ================================================================
  *
- * Use Case 2: Basic Room Types & Static Availability
+ * Book My Stay Application
  *
- * Description:
- * This class demonstrates room initialization
- * using domain models before introducing
- * centralized inventory management.
+ * Use Case 3: Centralized Room Inventory Management
  *
- * Availability is represented using
- * simple variables to highlight limitations.
+ * Demonstrates centralized inventory using HashMap.
  *
- * @version 2.1
+ * @version 3.1
  */
 
-public class BookMyStayApp {
+public class BookingMystayApp {
 
     public static void main(String[] args) {
 
-        System.out.println("Hotel Room Initialization\n");
+        System.out.println("Hotel Room Inventory Status\n");
 
-        // Create Room Objects
+        // Create room objects
         Room singleRoom = new SingleRoom();
         Room doubleRoom = new DoubleRoom();
         Room suiteRoom = new SuiteRoom();
 
-        // Static availability variables
-        int singleAvailable = 5;
-        int doubleAvailable = 3;
-        int suiteAvailable = 2;
+        // Initialize inventory
+        RoomInventory inventory = new RoomInventory();
 
         // Display Single Room
         System.out.println("Single Room:");
         System.out.println("Beds: " + singleRoom.getBeds());
         System.out.println("Size: " + singleRoom.getSize() + " sqft");
         System.out.println("Price per night: " + singleRoom.getPricePerNight());
-        System.out.println("Available: " + singleAvailable);
+        System.out.println("Available Rooms: " +
+                inventory.getRoomAvailability().get("Single Room"));
 
         System.out.println();
 
@@ -46,7 +44,8 @@ public class BookMyStayApp {
         System.out.println("Beds: " + doubleRoom.getBeds());
         System.out.println("Size: " + doubleRoom.getSize() + " sqft");
         System.out.println("Price per night: " + doubleRoom.getPricePerNight());
-        System.out.println("Available: " + doubleAvailable);
+        System.out.println("Available Rooms: " +
+                inventory.getRoomAvailability().get("Double Room"));
 
         System.out.println();
 
@@ -55,19 +54,55 @@ public class BookMyStayApp {
         System.out.println("Beds: " + suiteRoom.getBeds());
         System.out.println("Size: " + suiteRoom.getSize() + " sqft");
         System.out.println("Price per night: " + suiteRoom.getPricePerNight());
-        System.out.println("Available: " + suiteAvailable);
+        System.out.println("Available Rooms: " +
+                inventory.getRoomAvailability().get("Suite Room"));
     }
 }
 
 
 /**
  * ================================================================
- * DOMAIN MODEL – Room
+ * CLASS – RoomInventory
  * ================================================================
  *
- * Abstract class representing a general hotel room.
+ * Manages centralized room availability.
  *
- * @version 2.0
+ * @version 3.0
+ */
+
+class RoomInventory {
+
+    private Map<String, Integer> roomAvailability;
+
+    public RoomInventory() {
+        roomAvailability = new HashMap<>();
+        initializeInventory();
+    }
+
+    private void initializeInventory() {
+
+        roomAvailability.put("Single Room", 5);
+        roomAvailability.put("Double Room", 3);
+        roomAvailability.put("Suite Room", 2);
+
+    }
+
+    public Map<String, Integer> getRoomAvailability() {
+        return roomAvailability;
+    }
+
+    public void updateAvailability(String roomType, int count) {
+        roomAvailability.put(roomType, count);
+    }
+}
+
+
+/**
+ * ================================================================
+ * ABSTRACT CLASS – Room
+ * ================================================================
+ *
+ * Represents a general room type.
  */
 
 abstract class Room {
@@ -97,11 +132,7 @@ abstract class Room {
 
 
 /**
- * ================================================================
- * DOMAIN MODEL – Single Room
- * ================================================================
- *
- * @version 2.0
+ * Single Room Class
  */
 
 class SingleRoom extends Room {
@@ -113,11 +144,7 @@ class SingleRoom extends Room {
 
 
 /**
- * ================================================================
- * DOMAIN MODEL – Double Room
- * ================================================================
- *
- * @version 2.0
+ * Double Room Class
  */
 
 class DoubleRoom extends Room {
@@ -129,11 +156,7 @@ class DoubleRoom extends Room {
 
 
 /**
- * ================================================================
- * DOMAIN MODEL – Suite Room
- * ================================================================
- *
- * @version 2.0
+ * Suite Room Class
  */
 
 class SuiteRoom extends Room {
